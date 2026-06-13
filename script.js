@@ -1,59 +1,77 @@
+const CHOICES = ['rock', 'paper', 'scissors'];
+const BEATS = { rock: 'scissors', scissors: 'paper', paper: 'rock' };
 
-var you;
-var yourScore = 0;
-var opponent;
-var opponentScore = 0;
+let yourScore = 0;
+let opponentScore = 0;
+let busy = false;
 
-var choices = ["rock", "paper", "scissors"];
+const choicesEl = document.getElementById('choices');
+const yourChoiceImg = document.getElementById('your-choice');
+const opponentChoiceImg = document.getElementById('opponent-choice');
+const opponentWrapper = document.getElementById('opponent-wrapper');
+const resultMsg = document.getElementById('result-message');
+const yourScoreEl = document.getElementById('your-score');
+const opponentScoreEl = document.getElementById('opponent-score');
+const resetBtn = document.getElementById('reset-btn');
 
-window.onload = function() {
-    for (let i = 0; i < 3; i++) {
-        let choice = document.createElement("img");
-        choice.id = choices[i];
-        choice.src = choices[i] + ".png";
-        choice.addEventListener("click", selectChoice);
-        document.getElementById("choices").append(choice);
-    }
+CHOICES.forEach(choice => {
+    const img = document.createElement('img');
+    img.src = `${choice}.png`;
+    img.alt = choice;
+    img.title = choice.charAt(0).toUpperCase() + choice.slice(1);
+    img.addEventListener('click', () => selectChoice(choice));
+    choicesEl.appendChild(img);
+});
+
+function selectChoice(you) {
+    if (busy) return;
+    busy = true;
+    choicesEl.classList.add('disabled');
+
+    const opponent = CHOICES[Math.floor(Math.random() * CHOICES.length)];
+
+    yourChoiceImg.src = `${you}.png`;
+    opponentChoiceImg.removeAttribute('src');
+    opponentWrapper.classList.add('thinking');
+    
+    resultMsg.textContent = 'Thinking...';
+    resultMsg.className = '';
+
+    setTimeout(() => {
+        opponentWrapper.classList.remove('thinking');
+        opponentChoiceImg.src = `${opponent}.png`;
+
+        if (you === opponent) {
+            resultMsg.textContent = 'Draw!';
+            resultMsg.className = 'draw';
+        } else if (BEATS[you] === opponent) {
+            yourScore++;
+            resultMsg.textContent = 'You win!';
+            resultMsg.className = 'win';
+        } else {
+            opponentScore++;
+            resultMsg.textContent = 'Opponent wins!';
+            resultMsg.className = 'lose';
+        }
+
+        yourScoreEl.textContent = yourScore;
+        opponentScoreEl.textContent = opponentScore;
+
+        busy = false;
+        choicesEl.classList.remove('disabled');
+    }, 700);
 }
 
-function selectChoice() {
-    you = this.id;
-    document.getElementById("your-choice").src = you + ".png";
-
-    opponent = choices[Math.floor(Math.random() * 3)]; 
-    document.getElementById("opponent-choice").src = opponent + ".png";
-
-    if (you == opponent) {
-        yourScore += 1;
-        opponentScore += 1;
-    }
-    else {
-        if (you == "rock") {
-            if (opponent == "scissors") {
-                yourScore += 1;
-            }
-            else if (opponent == "paper") {
-                opponentScore += 1;
-            }
-        }
-        else if (you == "scissors") {
-            if (opponent == "paper") {
-                yourScore += 1;
-            }
-            else if (opponent == "rock") {
-                opponentScore += 1;
-            }
-        }
-        else if (you == "paper") {
-            if (opponent == "rock") {
-                yourScore += 1;
-            }
-            else if (opponent == "scissors") {
-                opponentScore += 1;
-            }
-        }
-    }
-
-    document.getElementById("your-score").innerText = yourScore;
-    document.getElementById("opponent-score").innerText = opponentScore;
+function resetGame() {
+    yourScore = 0;
+    opponentScore = 0;
+    yourScoreEl.textContent = '0';
+    opponentScoreEl.textContent = '0';
+    yourChoiceImg.removeAttribute('src');
+    opponentChoiceImg.removeAttribute('src');
+    opponentWrapper.classList.remove('thinking');
+    resultMsg.textContent = 'Pick a choice below';
+    resultMsg.className = '';
 }
+
+resetBtn.addEventListener('click', resetGame);

@@ -1,26 +1,50 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Rock Paper Scissors</title> 
-        <link rel="stylesheet" href="style.css">
-        <script src="script.js"></script>
-    </head>
-
-    <body>
-    <h1>Rock Paper Scissors</h1>
-
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
     <div class="game-container">
-        <h2 id="opponent-score">0</h2>
-        <img id="opponent-choice">
+        <h1>ROCK PAPER SCISSORS</h1>
+        
+        <div class="score-board">
+            <div class="score-box">
+                <span class="score-label">You</span>
+                <span class="score-number" id="your-score">0</span>
+            </div>
+            <div class="score-box">
+                <span class="score-label">Opponent</span>
+                <span class="score-number" id="opponent-score">0</span>
+            </div>
+        </div>
 
-        <br>
+        <div id="result-message">Pick a choice below</div>
 
-        <img id="your-choice">
+        <div class="display-area">
+            <div class="display-slot">
+                <span class="display-label">You</span>
+                <div class="img-wrapper" id="your-wrapper">
+                    <img id="your-choice" alt="">
+                </div>
+            </div>
+
+            <div class="vs-badge">VS</div>
+
+            <div class="display-slot">
+                <span class="display-label">Opponent</span>
+                <div class="img-wrapper" id="opponent-wrapper">
+                    <img id="opponent-choice" alt="">
+                </div>
+            </div>
+        </div>
+
         <div id="choices"></div>
 
-        <h2 id="your-score">0</h2>
+        <button id="reset-btn">&#8635; Reset</button>
     </div>
 </body>
-</html> 
+</html>
